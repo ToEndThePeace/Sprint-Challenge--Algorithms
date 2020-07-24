@@ -81,11 +81,13 @@ class SortingRobot:
         Turn on the robot's light
         """
         self._light = "ON"
+
     def set_light_off(self):
         """
         Turn off the robot's light
         """
         self._light = "OFF"
+
     def light_is_on(self):
         """
         Returns True if the robot's light is on and False otherwise.
@@ -96,15 +98,36 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        while not self.light_is_on():
+            self.swap_item()
+            while self.can_move_right():
+                self.move_right()
+                if self.compare_item() <= 0:
+                    self.swap_item()
+                    self.set_light_on()
+            while self.can_move_left():
+                if self.compare_item() >= 0:
+                    self.swap_item()
+                else:
+                    self.set_light_off()
+                self.move_left()
+            self.swap_item()
+
+
+"""
+For this problem, I propose a modified bubble sort implementation. This will work perfectly given the constraints, as our robot is capable of very little logic in and of itself. Implementing nested for loops and using the robot's light as a flag to check if any swaps have been made, we can implement the bubble sort algorithm using the logic that if the list item the robot is holding is less than the one in front of it, it will swap them and move on to the next one. When the robot reaches the end, it will have to move left until the item it is holding is greater than the item in front of it.
+
+UPDATE:
+The current iteration is less like a bubble sort. When tested with an actual real-life data set and a simulated robot sort, the implementation that worked for me was to iterate to the right, swapping the held item whenever the item the robot was placed in front of was larger than the held item, turning on the light whenever a swap occurred. Afterwards, the robot would go from the right all the way to the left, swapping any element that it found to be less than its held element, with the assumption that if the array was sorted, every element would be swapped. With this implementation, on the way back to the left, if any element was not swapped, the light would turn off, indicating the list was still unsorted and further passes were required. It seems to work :)
+"""
 
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
 
-    l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
+    l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1,
+         45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
 
     robot = SortingRobot(l)
 
